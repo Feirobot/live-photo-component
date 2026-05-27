@@ -1,0 +1,50 @@
+{
+  "name": "@openfilm/live-photo",
+  "version": "1.0.0",
+  "description": "A Web Component that brings Apple-style Live Photos to any website. Zero dependencies, native HTML5.",
+  "type": "module",
+  "main": "dist/live-photo.js",
+  "module": "dist/live-photo.mjs",
+  "browser": "dist/live-photo.umd.js",
+  "exports": {
+    ".": {
+      "import": "./dist/live-photo.mjs",
+      "require": "./dist/live-photo.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "demo": "npx serve demo -p 3000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Feirobot/Live-Photos-for-WordPress.git"
+  },
+  "keywords": [
+    "live-photo",
+    "live-photos",
+    "web-component",
+    "apple",
+    "photo",
+    "video",
+    "html5",
+    "custom-element"
+  ],
+  "author": "Feiro <Feirobot@gmail.com>",
+  "license": "GPL-2.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Feirobot/Live-Photos-for-WordPress/issues"
+  },
+  "homepage": "https://github.com/Feirobot/Live-Photos-for-WordPress#readme",
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.9.0",
+    "rollup-plugin-postcss": "^4.0.2"
+  }
+}

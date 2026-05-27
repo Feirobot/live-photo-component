@@ -1,0 +1,163 @@
+/* LivePhoto Web Component Styles */
+
+:root {
+  --lp-border-radius: 8px;
+}
+
+live-photo {
+  display: block;
+  margin: 1em auto;
+}
+
+.live-photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--lp-border-radius);
+  height: auto !important;
+  display: block;
+  background-color: #f0f0f0;
+  aspect-ratio: 4 / 3;
+  min-height: 200px;
+}
+
+.live-photo .container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+
+.live-photo .container video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.live-photo .photo-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 3;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+
+.live-photo .overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  background: transparent;
+}
+
+.live-photo.zoom .photo-bg {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.live-photo.zoom video {
+  opacity: 1;
+}
+
+.live-photo .icon {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: var(--lp-border-radius);
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  height: 22px;
+  background-color: rgba(240, 255, 255, 0.67);
+  cursor: pointer;
+  user-select: none;
+  z-index: 10;
+  gap: 3px;
+}
+
+.live-photo .icon svg {
+  width: 22px;
+  height: 22px;
+  color: #606060;
+}
+
+.live-photo .icon span {
+  padding: 3px;
+  color: #606060;
+  font-size: 80%;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+@media (min-width: 769px) {
+  .live-photo {
+    max-width: min(800px, 60%);
+  }
+
+  .live-photo .icon {
+    left: 15px;
+    top: 15px;
+    height: 24px;
+  }
+
+  .live-photo .icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .live-photo .icon span {
+    font-size: 85%;
+  }
+}
+
+@media (max-width: 768px) {
+  .live-photo {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .live-photo .icon {
+    left: 8px;
+    top: 8px;
+    height: 20px;
+  }
+
+  .live-photo .icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .live-photo .icon span {
+    font-size: 75%;
+  }
+}
+
+/* Hide video controls */
+.live-photo .container video::-webkit-media-controls {
+  display: none !important;
+}
+
+.live-photo .container video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+.live-photo .container video::-webkit-media-controls-panel {
+  display: none !important;
+}

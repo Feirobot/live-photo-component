@@ -1,29 +1,18 @@
-# OS files
-.DS_Store
-Thumbs.db
-desktop.ini
+# Dependencies
+node_modules/
 
-# Editor files
+# Build output
+dist/
+
+# IDE
 .vscode/
 .idea/
 *.swp
-*.swo
-*~
 
-# WordPress local config
-wp-config.php
-
-# Node modules (if any build process added later)
-node_modules/
-
-# Build artifacts
-*.zip
-!Live-Photos-for-WordPress-*.zip
+# OS
+.DS_Store
+Thumbs.db
 
 # Logs
 *.log
 npm-debug.log*
-
-# Temporary files
-tmp/
-temp/
