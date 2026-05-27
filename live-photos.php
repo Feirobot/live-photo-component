@@ -1,9 +1,17 @@
 <?php
 /**
- * Plugin Name: Live Photos for WordPress
- * Description: 实现与苹果Live Photos相同效果的WordPress插件
- * Version: 1.4.1
- * Author: fei
+ * Plugin Name:       Live Photos for WordPress
+ * Plugin URI:        https://github.com/Feirobot/Live-Photos-for-WordPress
+ * Description:       Display Apple-style Live Photos on your WordPress site. / 在 WordPress 中展示苹果 Live Photos 动态照片效果。
+ * Version:           1.4.1
+ * Requires at least: 5.0
+ * Requires PHP:      7.4
+ * Author:            fei
+ * Author URI:        https://eatbbq.cn
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       live-photos
+ * Domain Path:       /languages
  */
 
 if (!defined('ABSPATH')) {
