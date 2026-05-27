@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LivePhoto Web Component Demo</title>
+  <link rel="stylesheet" href="src/styles.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f5f5f5;
+      color: #333;
+    }
+    h1 { text-align: center; margin-bottom: 10px; }
+    .subtitle { text-align: center; color: #666; margin-bottom: 40px; }
+    .demo-section {
+      background: white;
+      padding: 30px;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 { margin-top: 0; }
+    code {
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      color: #666;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <h1>LivePhoto Web Component</h1>
+  <p class="subtitle">Apple-style Live Photos for any website</p>
+
+  <div class="demo-section">
+    <h2>Example 1: Muted (Default)</h2>
+    <p>Hover the <code>LIVE</code> badge on desktop, or long-press on mobile.</p>
+    <live-photo
+      photo="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/MVIMG_20241231_161000-scaled.jpg"
+      video="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/VID_20250912_234046.mp4"
+      width="500"
+      muted>
+    </live-photo>
+  </div>
+
+  <div class="demo-section">
+    <h2>Example 2: With Sound</h2>
+    <p>Set <code>muted="false"</code> to enable audio.</p>
+    <live-photo
+      photo="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/MVIMG_20250405_132341-scaled.jpg"
+      video="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/VID_20250912_234608.mp4"
+      width="600"
+      muted="false">
+    </live-photo>
+  </div>
+
+  <div class="demo-section">
+    <h2>Example 3: Full Width</h2>
+    <p>Omit <code>width</code> or set to <code>100%</code> for responsive layout.</p>
+    <live-photo
+      photo="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2026/05/DSCF2490.00_00_05_34.Still001.jpg"
+      video="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/VID_20250912_234608.mp4">
+    </live-photo>
+  </div>
+
+  <div class="demo-section">
+    <h2>How to Use</h2>
+    <pre><code>&lt;script src="dist/live-photo.umd.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="dist/styles.css"&gt;
+
+&lt;live-photo
+  photo="image.jpg"
+  video="video.mp4"
+  width="600"
+  muted&gt;
+&lt;/live-photo&gt;</code></pre>
+  </div>
+
+  <p class="footer">
+    Made with ❤️ by <a href="https://github.com/Feirobot">Feiro</a> | 
+    <a href="https://github.com/Feirobot/Live-Photos-for-WordPress">GitHub</a>
+  </p>
+
+  <script src="src/live-photo.js"></script>
+</body>
+</html>

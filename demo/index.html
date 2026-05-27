@@ -3,94 +3,276 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LivePhoto Web Component Demo</title>
+  <title>@openfilm/live-photo Demo</title>
   <link rel="stylesheet" href="../src/styles.css">
   <style>
+    * { box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 40px 20px;
-      background: #f5f5f5;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #333;
+      min-height: 100vh;
     }
-    h1 { text-align: center; margin-bottom: 10px; }
-    .subtitle { text-align: center; color: #666; margin-bottom: 40px; }
-    .demo-section {
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+      color: white;
+    }
+    h1 { margin: 0 0 10px 0; font-size: 2.5em; }
+    .subtitle { font-size: 1.2em; opacity: 0.9; margin: 0; }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    .demo-card {
       background: white;
       padding: 30px;
-      margin-bottom: 30px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
-    h2 { margin-top: 0; }
+    h2 { margin: 0 0 15px 0; font-size: 1.3em; color: #667eea; }
+    p { color: #666; line-height: 1.6; margin: 0 0 15px 0; }
     code {
       background: #f0f0f0;
-      padding: 2px 6px;
+      padding: 2px 8px;
       border-radius: 4px;
       font-size: 0.9em;
+      font-family: 'Courier New', monospace;
     }
-    .footer {
+    .code-block {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.85em;
+      line-height: 1.6;
+      margin: 20px 0;
+    }
+    .code-block .tag { color: #569cd6; }
+    .code-block .attr { color: #9cdcfe; }
+    .code-block .value { color: #ce9178; }
+    .features {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      margin-bottom: 40px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .feature-item {
+      padding: 15px;
+      border-left: 3px solid #667eea;
+      background: #f8f9fa;
+      border-radius: 0 8px 8px 0;
+    }
+    .feature-item strong { display: block; margin-bottom: 5px; color: #667eea; }
+    .feature-item span { font-size: 0.9em; color: #666; }
+    .api-demo {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      margin-bottom: 40px;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #667eea;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: all 0.2s;
+    }
+    button:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .status {
+      margin-top: 15px;
+      padding: 10px;
+      background: #f0f0f0;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.85em;
+    }
+    footer {
       text-align: center;
       margin-top: 60px;
-      color: #666;
-      font-size: 0.9em;
+      color: white;
+      opacity: 0.8;
     }
+    footer a { color: white; }
   </style>
 </head>
 <body>
-  <h1>LivePhoto Web Component</h1>
-  <p class="subtitle">Apple-style Live Photos for any website</p>
+  <header>
+    <h1>@openfilm/live-photo</h1>
+    <p class="subtitle">Apple-style Live Photos for any website</p>
+  </header>
 
-  <div class="demo-section">
-    <h2>Example 1: Muted (Default)</h2>
-    <p>Hover the <code>LIVE</code> badge on desktop, or long-press on mobile.</p>
+  <div class="demo-grid">
+    <div class="demo-card">
+      <h2>Example 1: Basic (Muted)</h2>
+      <p>Default muted mode. Hover the <code>LIVE</code> badge on desktop, or long-press on mobile.</p>
+      <live-photo
+        photo="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/MVIMG_20241231_161000-scaled.jpg"
+        video="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/VID_20250912_234046.mp4"
+        width="100%"
+        muted>
+      </live-photo>
+    </div>
+
+    <div class="demo-card">
+      <h2>Example 2: With Sound</h2>
+      <p>Set <code>muted="false"</code> to enable audio playback.</p>
+      <live-photo
+        photo="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/MVIMG_20250405_132341-scaled.jpg"
+        video="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/VID_20250912_234608.mp4"
+        width="100%"
+        muted="false">
+      </live-photo>
+    </div>
+
+    <div class="demo-card">
+      <h2>Example 3: Autoplay</h2>
+      <p>Add <code>autoplay</code> to auto-play when component enters viewport.</p>
+      <live-photo
+        photo="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2026/05/DSCF2490.00_00_05_34.Still001.jpg"
+        video="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/VID_20250912_234608.mp4"
+        width="100%"
+        autoplay
+        muted>
+      </live-photo>
+    </div>
+
+    <div class="demo-card">
+      <h2>Example 4: Loop + Custom Radius</h2>
+      <p>Use <code>loop</code> for continuous playback and <code>radius</code> for rounded corners.</p>
+      <live-photo
+        photo="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/MVIMG_20241231_161000-scaled.jpg"
+        video="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/VID_20250912_234046.mp4"
+        width="100%"
+        loop
+        radius="16">
+      </live-photo>
+    </div>
+  </div>
+
+  <div class="api-demo">
+    <h2>JavaScript API Demo</h2>
+    <p>Test the programmatic control methods:</p>
     <live-photo
+      id="api-demo"
       photo="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/MVIMG_20241231_161000-scaled.jpg"
       video="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/VID_20250912_234046.mp4"
-      width="500"
+      width="100%"
       muted>
     </live-photo>
+    <div class="button-group">
+      <button onclick="document.getElementById('api-demo').play()">▶ Play</button>
+      <button onclick="document.getElementById('api-demo').pause()">⏸ Pause</button>
+      <button onclick="toggleStatus()">📊 Check Status</button>
+    </div>
+    <div class="status" id="status">Ready</div>
   </div>
 
-  <div class="demo-section">
-    <h2>Example 2: With Sound</h2>
-    <p>Set <code>muted="false"</code> to enable audio.</p>
-    <live-photo
-      photo="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/MVIMG_20250405_132341-scaled.jpg"
-      video="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/VID_20250912_234608.mp4"
-      width="600"
-      muted="false">
-    </live-photo>
+  <div class="features">
+    <h2>Features</h2>
+    <div class="features-grid">
+      <div class="feature-item">
+        <strong>✨ Zero Dependencies</strong>
+        <span>Pure vanilla JS</span>
+      </div>
+      <div class="feature-item">
+        <strong>📱 Touch-friendly</strong>
+        <span>Long-press on mobile</span>
+      </div>
+      <div class="feature-item">
+        <strong>💬 WeChat Ready</strong>
+        <span>Tap-to-play support</span>
+      </div>
+      <div class="feature-item">
+        <strong>⚡ Autoplay</strong>
+        <span>Viewport detection</span>
+      </div>
+      <div class="feature-item">
+        <strong>📳 Haptic Feedback</strong>
+        <span>Vibration on play</span>
+      </div>
+      <div class="feature-item">
+        <strong>♿ Accessible</strong>
+        <span>Keyboard navigation</span>
+      </div>
+    </div>
   </div>
 
-  <div class="demo-section">
-    <h2>Example 3: Full Width</h2>
-    <p>Omit <code>width</code> or set to <code>100%</code> for responsive layout.</p>
-    <live-photo
-      photo="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2026/05/DSCF2490.00_00_05_34.Still001.jpg"
-      video="https://eatbbqcici.oss-cn-shenzhen.aliyuncs.com/images/eatbbq/2025/09/VID_20250912_234608.mp4">
-    </live-photo>
+  <div class="demo-card">
+    <h2>Installation</h2>
+    <div class="code-block">
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="value">"https://cdn.jsdelivr.net/npm/@openfilm/live-photo/dist/live-photo.umd.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="value">"stylesheet"</span> <span class="attr">href</span>=<span class="value">"https://cdn.jsdelivr.net/npm/@openfilm/live-photo/dist/styles.css"</span><span class="tag">&gt;</span>
+
+<span class="tag">&lt;live-photo</span>
+  <span class="attr">photo</span>=<span class="value">"image.jpg"</span>
+  <span class="attr">video</span>=<span class="value">"video.mp4"</span>
+  <span class="attr">width</span>=<span class="value">"600"</span>
+  <span class="attr">muted</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/live-photo&gt;</span>
+    </div>
   </div>
 
-  <div class="demo-section">
-    <h2>How to Use</h2>
-    <pre><code>&lt;script src="dist/live-photo.umd.js"&gt;&lt;/script&gt;
-&lt;link rel="stylesheet" href="dist/styles.css"&gt;
-
-&lt;live-photo
-  photo="image.jpg"
-  video="video.mp4"
-  width="600"
-  muted&gt;
-&lt;/live-photo&gt;</code></pre>
-  </div>
-
-  <p class="footer">
-    Made with ❤️ by <a href="https://github.com/Feirobot">Feiro</a> | 
-    <a href="https://github.com/Feirobot/Live-Photos-for-WordPress">GitHub</a>
-  </p>
+  <footer>
+    <p>Made with ❤️ by <a href="https://github.com/Feirobot">Feiro</a> | 
+    <a href="https://github.com/Feirobot/Live-Photos-for-WordPress">GitHub</a> | 
+    <a href="https://www.npmjs.com/package/@openfilm/live-photo">npm</a></p>
+  </footer>
 
   <script src="../src/live-photo.js"></script>
+  <script>
+    const demo = document.getElementById('api-demo');
+    const status = document.getElementById('status');
+
+    demo.addEventListener('live-photo:play', () => {
+      status.textContent = '▶ Playing';
+      status.style.background = '#e8f5e9';
+    });
+
+    demo.addEventListener('live-photo:pause', () => {
+      status.textContent = '⏸ Paused';
+      status.style.background = '#fff3e0';
+    });
+
+    demo.addEventListener('live-photo:ready', () => {
+      status.textContent = '✓ Component Ready';
+      status.style.background = '#e3f2fd';
+    });
+
+    function toggleStatus() {
+      const isPlaying = demo.isPlaying();
+      status.textContent = `Status: ${isPlaying ? '▶ Playing' : '⏸ Stopped'}`;
+      status.style.background = isPlaying ? '#e8f5e9' : '#fff3e0';
+    }
+  </script>
 </body>
 </html>
