@@ -146,10 +146,7 @@ class LivePhotoElement extends HTMLElement {
           <div class="overlay"></div>
         </div>
         <div class="icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-            <circle cx="12" cy="12" r="3" fill="currentColor"/>
-          </svg>
+          <img class="no-zoom static" loading="lazy">
           <span>LIVE</span>
         </div>
         <div class="loading">
@@ -175,6 +172,19 @@ class LivePhotoElement extends HTMLElement {
 
     // Set video source
     video.src = this.video;
+
+    // Set icon path dynamically (relative to script location)
+    const iconImg = el.querySelector('.icon img');
+    if (iconImg && !iconImg.src) {
+      const scriptEl = document.currentScript || document.querySelector('script[src*="live-photo"]');
+      if (scriptEl) {
+        const basePath = scriptEl.src.substring(0, scriptEl.src.lastIndexOf('/'));
+        iconImg.src = basePath + '/live-icon.png';
+      } else {
+        // Fallback: try relative path
+        iconImg.src = 'live-icon.png';
+      }
+    }
 
     // Set photo background
     const photoUrl = this.photo;

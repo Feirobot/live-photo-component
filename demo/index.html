@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@openfilm/live-photo Demo</title>
-  <link rel="stylesheet" href="../src/styles.css">
+  <link rel="stylesheet" href="../dist/styles.css">
   <style>
     * { box-sizing: border-box; }
     body {
@@ -205,7 +205,7 @@
         <span>Pure vanilla JS</span>
       </div>
       <div class="feature-item">
-        <strong>📱 Touch-friendly</strong>
+        <strong> Touch-friendly</strong>
         <span>Long-press on mobile</span>
       </div>
       <div class="feature-item">
@@ -221,7 +221,7 @@
         <span>Vibration on play</span>
       </div>
       <div class="feature-item">
-        <strong>♿ Accessible</strong>
+        <strong> Accessible</strong>
         <span>Keyboard navigation</span>
       </div>
     </div>
@@ -248,30 +248,34 @@
     <a href="https://www.npmjs.com/package/@openfilm/live-photo">npm</a></p>
   </footer>
 
-  <script src="../src/live-photo.js"></script>
+  <script src="../dist/live-photo.umd.js"></script>
   <script>
     const demo = document.getElementById('api-demo');
     const status = document.getElementById('status');
 
-    demo.addEventListener('live-photo:play', () => {
-      status.textContent = '▶ Playing';
-      status.style.background = '#e8f5e9';
-    });
+    if (demo) {
+      demo.addEventListener('live-photo:play', () => {
+        status.textContent = '▶ Playing';
+        status.style.background = '#e8f5e9';
+      });
 
-    demo.addEventListener('live-photo:pause', () => {
-      status.textContent = '⏸ Paused';
-      status.style.background = '#fff3e0';
-    });
+      demo.addEventListener('live-photo:pause', () => {
+        status.textContent = '⏸ Paused';
+        status.style.background = '#fff3e0';
+      });
 
-    demo.addEventListener('live-photo:ready', () => {
-      status.textContent = '✓ Component Ready';
-      status.style.background = '#e3f2fd';
-    });
+      demo.addEventListener('live-photo:ready', () => {
+        status.textContent = '✓ Component Ready';
+        status.style.background = '#e3f2fd';
+      });
+    }
 
     function toggleStatus() {
-      const isPlaying = demo.isPlaying();
-      status.textContent = `Status: ${isPlaying ? '▶ Playing' : '⏸ Stopped'}`;
-      status.style.background = isPlaying ? '#e8f5e9' : '#fff3e0';
+      if (demo && demo.isPlaying) {
+        const isPlaying = demo.isPlaying();
+        status.textContent = `Status: ${isPlaying ? '▶ Playing' : '⏸ Stopped'}`;
+        status.style.background = isPlaying ? '#e8f5e9' : '#fff3e0';
+      }
     }
   </script>
 </body>

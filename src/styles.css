@@ -91,7 +91,7 @@ live-photo {
   opacity: 1;
 }
 
-/* LIVE icon badge */
+/* LIVE icon badge - matching WP version */
 .live-photo .icon {
   display: inline-flex;
   align-items: center;
@@ -101,38 +101,23 @@ live-photo {
   left: 10px;
   top: 10px;
   height: 22px;
-  background-color: var(--lp-icon-bg);
+  background-color: rgba(240, 255, 255, 0.67);
   cursor: pointer;
   user-select: none;
   z-index: 10;
-  gap: 3px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.live-photo .icon:hover {
-  background-color: rgba(240, 255, 255, 0.85);
-  transform: scale(1.05);
-}
-
-.live-photo .icon:active {
-  transform: scale(0.95);
-}
-
-.live-photo .icon svg {
+.live-photo .icon img {
   width: 22px;
   height: 22px;
-  color: var(--lp-icon-color);
 }
 
 .live-photo .icon span {
   padding: 3px;
-  color: var(--lp-icon-color);
+  color: #606060;
   font-size: 80%;
   font-weight: normal;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 /* Loading indicator */
@@ -186,7 +171,7 @@ live-photo {
     height: 24px;
   }
   
-  .live-photo .icon svg {
+  .live-photo .icon img {
     width: 24px;
     height: 24px;
   }
@@ -209,7 +194,7 @@ live-photo {
     height: 20px;
   }
   
-  .live-photo .icon svg {
+  .live-photo .icon img {
     width: 20px;
     height: 20px;
   }
