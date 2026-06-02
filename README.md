@@ -5,6 +5,13 @@
 📦 **npm**: [live-photo-component](https://www.npmjs.com/package/live-photo-component)  
 📝 **Blog**: [中文介绍](https://openfilm.cc/zh/posts/live-photos-introduction-zh/) | [English Intro](https://openfilm.cc/en/posts/live-photos-introduction-en/)
 
+## 🎬 Live Demo
+
+Try it online:
+
+- **🇨🇳 中文演示**: [Openfilm Blog - 实况照片介绍](https://openfilm.cc/zh/posts/live-photos-introduction-zh/)
+- **🇬🇧 English Demo**: [Openfilm Blog - Live Photos Introduction](https://openfilm.cc/en/posts/live-photos-introduction-en/)
+
 ---
 
 ## Features
