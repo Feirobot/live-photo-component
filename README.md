@@ -1,9 +1,11 @@
 # live-photo-component
 
-Apple-style Live Photo Web Component for any website.
+**中文**：Apple 风格实况照片 Web 组件，让静态照片栩栩如生 ｜ **EN**: Apple-style Live Photo Web Component that brings static photos to life.
 
-[![npm version](https://img.shields.io/npm/v/live-photo-component.svg)](https://www.npmjs.com/package/live-photo-component)
-[![License: GPL-2.0](https://img.shields.io/badge/License-GPL%202.0-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
+📦 **npm**: [live-photo-component](https://www.npmjs.com/package/live-photo-component)  
+📝 **Blog**: [中文介绍](https://openfilm.cc/zh/posts/live-photos-introduction-zh/) | [English Intro](https://openfilm.cc/en/posts/live-photos-introduction-en/)
+
+---
 
 ## Features
 
@@ -17,7 +19,7 @@ Apple-style Live Photo Web Component for any website.
 📐 **Responsive** — Adapts to any screen size  
 ♿ **Accessible** — Keyboard navigation and screen reader support  
 ⚡ **Autoplay** — Optional auto-play when component enters viewport  
-🎯 **LIVE Icon Animation** — Rotating icon when video plays (matching Apple's Live Photos)  
+🎯 **LIVE Icon Animation** — Rotating icon when video plays (matching Apple's Live Photos)
 
 ## Installation
 
@@ -60,8 +62,8 @@ import 'live-photo-component/dist/styles.css';
   video="video.mp4" 
   width="600" 
   muted 
-  autoplay
-  radius="12"
+  autoplay 
+  radius="12" 
   loop>
 </live-photo>
 ```
@@ -140,6 +142,7 @@ The component features an Apple-style LIVE badge with a concentric circle icon. 
 - **Visual Feedback**: Provides clear indication that the Live Photo is playing
 
 The animation is triggered automatically when you interact with the component:
+
 - **Desktop**: Hover over the LIVE badge
 - **Mobile**: Long-press the photo
 
@@ -175,7 +178,7 @@ npm run build
 npm run demo
 ```
 
-Then open `http://localhost:8080/demo/index.html`
+Then open http://localhost:8080/demo/index.html
 
 ## Project Structure
 
@@ -197,8 +200,10 @@ GPL-2.0-or-later
 
 ## Author
 
-Made with ❤️ by [Feiro](https://github.com/Feirobot)
+Made with ❤️ by Feiro
 
 ## Related
 
-- [Live Photos for WordPress](https://github.com/Feirobot/Live-Photos-for-WordPress) - WordPress plugin version
+- 📝 **Blog Post**: [Live Photos Introduction (中文)](https://openfilm.cc/zh/posts/live-photos-introduction-zh/) | [English](https://openfilm.cc/en/posts/live-photos-introduction-en/)
+- 🌐 **Openfilm Blog**: [https://openfilm.cc](https://openfilm.cc)
+- 📦 **npm Package**: [live-photo-component](https://www.npmjs.com/package/live-photo-component)
