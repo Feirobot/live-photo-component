@@ -1,8 +1,8 @@
-# @openfilm/live-photo
+# live-photo-component
 
 Apple-style Live Photo Web Component for any website.
 
-[![npm version](https://img.shields.io/npm/v/@openfilm/live-photo.svg)](https://www.npmjs.com/package/@openfilm/live-photo)
+[![npm version](https://img.shields.io/npm/v/live-photo-component.svg)](https://www.npmjs.com/package/live-photo-component)
 [![License: GPL-2.0](https://img.shields.io/badge/License-GPL%202.0-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 ## Features
@@ -17,27 +17,28 @@ Apple-style Live Photo Web Component for any website.
 📐 **Responsive** — Adapts to any screen size  
 ♿ **Accessible** — Keyboard navigation and screen reader support  
 ⚡ **Autoplay** — Optional auto-play when component enters viewport  
+🎯 **LIVE Icon Animation** — Rotating icon when video plays (matching Apple's Live Photos)  
 
 ## Installation
 
 ### Via npm
 
 ```bash
-npm install @openfilm/live-photo
+npm install live-photo-component
 ```
 
 ### Via CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@openfilm/live-photo/dist/live-photo.umd.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@openfilm/live-photo/dist/styles.css">
+<script src="https://unpkg.com/live-photo-component/dist/live-photo.umd.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/live-photo-component/dist/styles.css">
 ```
 
 ### Import as ES Module
 
 ```javascript
-import '@openfilm/live-photo';
-import '@openfilm/live-photo/dist/styles.css';
+import 'live-photo-component';
+import 'live-photo-component/dist/styles.css';
 ```
 
 ## Usage
@@ -129,6 +130,18 @@ lp.muted = !lp.muted;
 | `live-photo:ready` | Fired when component is initialized |
 | `live-photo:play` | Fired when video starts playing |
 | `live-photo:pause` | Fired when video stops |
+
+## LIVE Icon Animation
+
+The component features an Apple-style LIVE badge with a concentric circle icon. When the video plays:
+
+- **Icon Rotation**: The LIVE icon rotates 360° every 5 seconds
+- **Smooth Transition**: Video fades in while photo fades out
+- **Visual Feedback**: Provides clear indication that the Live Photo is playing
+
+The animation is triggered automatically when you interact with the component:
+- **Desktop**: Hover over the LIVE badge
+- **Mobile**: Long-press the photo
 
 ## Browser Support
 
