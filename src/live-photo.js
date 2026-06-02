@@ -268,7 +268,7 @@ class LivePhotoElement extends HTMLElement {
 
     video.play().then(() => {
       if (navigator.vibrate) navigator.vibrate(50);
-      el.classList.add('playing');
+      el.classList.add('zoom');
       this._isPlaying = true;
     }).catch((err) => {
       console.warn('[live-photo] Playback failed:', err);
@@ -279,7 +279,7 @@ class LivePhotoElement extends HTMLElement {
     const video = el.querySelector('video');
     if (!video) return;
 
-    el.classList.remove('playing');
+    el.classList.remove('zoom');
     video.pause();
     video.currentTime = 0;
     this._isPlaying = false;

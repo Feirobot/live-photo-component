@@ -112,6 +112,26 @@ live-photo {
   height: 22px;
 }
 
+/* Playing state - show video, hide photo */
+.live-photo.zoom .photo-bg {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.live-photo.zoom video {
+  opacity: 1;
+}
+
+/* Rotate icon when playing */
+.live-photo.zoom .icon img {
+  animation: spin 5s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .live-photo .icon span {
   padding: 3px;
   color: #606060;
