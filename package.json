@@ -1,21 +1,25 @@
 {
-  "name": "@openfilm/live-photo",
+  "name": "live-photo-component",
   "version": "1.0.0",
-  "description": "A Web Component that brings Apple-style Live Photos to any website. Zero dependencies, native HTML5.",
+  "description": "Apple-style Live Photo Web Component. Zero dependencies, native HTML5.",
   "type": "module",
-  "main": "dist/live-photo.js",
+  "main": "dist/live-photo.umd.js",
   "module": "dist/live-photo.mjs",
   "browser": "dist/live-photo.umd.js",
+  "style": "dist/styles.css",
   "exports": {
     ".": {
       "import": "./dist/live-photo.mjs",
-      "require": "./dist/live-photo.js"
+      "require": "./dist/live-photo.umd.js"
     },
     "./styles.css": "./dist/styles.css"
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "rollup -c",
@@ -24,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Feirobot/Live-Photos-for-WordPress.git"
+    "url": "git+https://github.com/Feirobot/live-photo-component.git"
   },
   "keywords": [
     "live-photo",
@@ -39,12 +43,11 @@
   "author": "Feiro <Feirobot@gmail.com>",
   "license": "GPL-2.0-or-later",
   "bugs": {
-    "url": "https://github.com/Feirobot/Live-Photos-for-WordPress/issues"
+    "url": "https://github.com/Feirobot/live-photo-component/issues"
   },
-  "homepage": "https://github.com/Feirobot/Live-Photos-for-WordPress#readme",
+  "homepage": "https://github.com/Feirobot/live-photo-component#readme",
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
-    "rollup": "^4.9.0",
-    "rollup-plugin-postcss": "^4.0.2"
+    "rollup": "^4.9.0"
   }
 }

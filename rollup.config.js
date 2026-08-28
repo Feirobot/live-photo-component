@@ -1,4 +1,20 @@
+import { copyFileSync, mkdirSync } from 'node:fs';
 import terser from '@rollup/plugin-terser';
+
+// Copy static assets (styles + LIVE icon) into dist/ on every build,
+// so the published package always contains dist/styles.css and dist/live-icon.png.
+function copyAssets() {
+  return {
+    name: 'copy-assets',
+    buildStart() {
+      mkdirSync('dist', { recursive: true });
+    },
+    closeBundle() {
+      copyFileSync('src/styles.css', 'dist/styles.css');
+      copyFileSync('src/live-icon.png', 'dist/live-icon.png');
+    }
+  };
+}
 
 export default [
   // ES Module
@@ -9,7 +25,7 @@ export default [
       format: 'esm',
       sourcemap: true
     },
-    plugins: [terser()]
+    plugins: [terser(), copyAssets()]
   },
   // UMD (Browser CDN)
   {
@@ -20,6 +36,6 @@ export default [
       name: 'LivePhoto',
       sourcemap: true
     },
-    plugins: [terser()]
+    plugins: [terser(), copyAssets()]
   }
 ];

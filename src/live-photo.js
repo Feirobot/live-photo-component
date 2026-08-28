@@ -1,5 +1,5 @@
 /**
- * @openfilm/live-photo
+ * live-photo-component
  * Apple-style Live Photo Web Component
  * 
  * @usage
