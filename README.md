@@ -23,7 +23,7 @@ Inline preview:
 ✨ **Zero Dependencies** — Pure vanilla JavaScript, no framework required  
 🎬 **Native HTML5** — Uses `<video>` and CSS for smooth playback  
 🌍 **Universal** — Works with WordPress, Hugo, Astro, React, Vue, or plain HTML  
-📱 **Touch-friendly** — Long-press on mobile, hover on desktop  
+📱 **Touch-friendly** — Long-press the photo or tap the LIVE badge on mobile; hover on desktop<br>
 💬 **WeChat Compatible** — Tap-to-play support for WeChat browser  
 📳 **Haptic Feedback** — Vibration on supported devices  
 📐 **Auto Aspect Ratio** — Automatically detects photo dimensions  
@@ -268,6 +268,7 @@ The animation is triggered automatically when you interact with the component:
 
 - **Desktop**: Hover over the LIVE badge
 - **Mobile**: Long-press the photo
+- **Mobile fallback**: Tap the LIVE badge to toggle playback
 
 ## Browser Support
 

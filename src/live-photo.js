@@ -52,9 +52,9 @@ class LivePhotoElement extends HTMLElement {
   get width() { return this.getAttribute('width') || '600'; }
   set width(val) { this.setAttribute('width', val); }
 
-  get muted() { return this.hasAttribute('muted') && this.getAttribute('muted') !== 'false'; }
+  get muted() { return !this.hasAttribute('muted') || this.getAttribute('muted') !== 'false'; }
   set muted(val) {
-    if (val === false || val === 'false') this.removeAttribute('muted');
+    if (val === false || val === 'false') this.setAttribute('muted', 'false');
     else this.setAttribute('muted', 'true');
   }
 
@@ -207,7 +207,7 @@ class LivePhotoElement extends HTMLElement {
     const loading = el.querySelector('.loading');
 
     // Set video source
-    video.src = this.video;
+    if (this.video) video.src = this.video;
 
     // Set icon path dynamically (relative to script location)
     const iconImg = el.querySelector('.icon img');
@@ -280,9 +280,12 @@ class LivePhotoElement extends HTMLElement {
       this._stopVideo(el);
     }, { passive: true });
 
-    // WeChat browser compatibility
+    // A direct tap on the LIVE badge is more reliable than a delayed long-press
+    // in mobile browsers because it retains the browser's user activation.
     const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
-    if (isWeChat) {
+    const isTouchFirst = navigator.maxTouchPoints > 0 ||
+      window.matchMedia?.('(hover: none), (pointer: coarse)').matches;
+    if (isWeChat || isTouchFirst) {
       icon.addEventListener('click', (e) => {
         e.preventDefault();
         this._isPlaying ? this._stopVideo(el) : this._playVideo(el);
@@ -308,6 +311,11 @@ class LivePhotoElement extends HTMLElement {
       this._isPlaying = true;
     }).catch((err) => {
       console.warn('[live-photo] Playback failed:', err);
+      this._dispatchEvent('error', {
+        code: 'PLAYBACK_FAILED',
+        error: err,
+        mediaError: video.error?.code || null
+      });
     });
   }
 
@@ -362,6 +370,12 @@ class LivePhotoElement extends HTMLElement {
       loading.classList.add('error');
       loading.querySelector('.spinner').textContent = '⚠️';
     }
+    const video = event.currentTarget;
+    this._dispatchEvent('error', {
+      code: 'VIDEO_LOAD_FAILED',
+      error: event,
+      mediaError: video?.error?.code || null
+    });
   }
 
   _dispatchEvent(name, extraDetail = {}) {
