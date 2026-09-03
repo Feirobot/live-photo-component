@@ -26,6 +26,8 @@
  * - live-photo:ready - Fired when component is initialized
  */
 
+import { detectLivePhoto, detectLivePhotos } from './live-photo-detector.js';
+
 class LivePhotoElement extends HTMLElement {
   static get observedAttributes() {
     return ['photo', 'video', 'width', 'muted', 'autoplay', 'radius', 'loop'];
@@ -37,6 +39,7 @@ class LivePhotoElement extends HTMLElement {
     this._longPressTimer = null;
     this._initialized = false;
     this._hasAutoplayed = false;
+    this._objectUrls = [];
   }
 
   // Property getters/setters
@@ -95,7 +98,7 @@ class LivePhotoElement extends HTMLElement {
         if (newValue) this._updateVideo(el, newValue);
         break;
       case 'width':
-        el.style.maxWidth = newValue || '600px';
+        el.style.maxWidth = this._cssLength(newValue || '600', 'px');
         break;
       case 'muted':
         const video = el.querySelector('video');
@@ -126,6 +129,39 @@ class LivePhotoElement extends HTMLElement {
     return this._isPlaying;
   }
 
+  /**
+   * Detect and preview an original Live Photo selection.
+   * Accepts an Android single-file Motion Photo or an Apple image + video pair.
+   */
+  async load(input) {
+    try {
+      const result = await detectLivePhoto(input);
+      this._revokeObjectUrls();
+      const photoUrl = URL.createObjectURL(result.photo);
+      const videoUrl = URL.createObjectURL(result.video);
+      this._objectUrls.push(photoUrl, videoUrl);
+      this.photo = photoUrl;
+      this.video = videoUrl;
+      this.dataset.protocol = result.protocol;
+      this._dispatchEvent('detected', result);
+      return result;
+    } catch (error) {
+      this._dispatchEvent('error', {
+        error,
+        code: error?.code || 'DETECTION_FAILED'
+      });
+      throw error;
+    }
+  }
+
+  static detect(input) {
+    return detectLivePhoto(input);
+  }
+
+  static detectAll(input) {
+    return detectLivePhotos(input);
+  }
+
   _render() {
     const width = this.width;
     const muted = this.muted;
@@ -133,8 +169,8 @@ class LivePhotoElement extends HTMLElement {
     const loop = this.loop;
 
     this.innerHTML = `
-      <div class="live-photo" 
-           style="max-width: ${width}px; border-radius: ${radius}px;" 
+      <div class="live-photo"
+           style="max-width: ${this._cssLength(width, 'px')}; border-radius: ${radius}px;"
            data-muted="${muted}">
         <div class="container">
           <div class="photo-bg"></div>
@@ -328,12 +364,25 @@ class LivePhotoElement extends HTMLElement {
     }
   }
 
-  _dispatchEvent(name) {
+  _dispatchEvent(name, extraDetail = {}) {
     this.dispatchEvent(new CustomEvent(`live-photo:${name}`, {
       bubbles: true,
       composed: true,
-      detail: { isPlaying: this._isPlaying }
+      detail: { isPlaying: this._isPlaying, ...extraDetail }
     }));
+  }
+
+  _cssLength(value, defaultUnit) {
+    const normalized = String(value ?? '').trim();
+    if (!normalized) return `600${defaultUnit}`;
+    return /^-?(?:\d+|\d*\.\d+)$/.test(normalized)
+      ? `${normalized}${defaultUnit}`
+      : normalized;
+  }
+
+  _revokeObjectUrls() {
+    this._objectUrls.forEach(url => URL.revokeObjectURL(url));
+    this._objectUrls = [];
   }
 
   _cleanup() {
@@ -341,6 +390,7 @@ class LivePhotoElement extends HTMLElement {
       clearTimeout(this._longPressTimer);
       this._longPressTimer = null;
     }
+    this._revokeObjectUrls();
   }
 }
 

@@ -30,7 +30,9 @@ Inline preview:
 📐 **Responsive** — Adapts to any screen size  
 ♿ **Accessible** — Keyboard navigation and screen reader support  
 ⚡ **Autoplay** — Optional auto-play when component enters viewport  
-🎯 **LIVE Icon Animation** — Rotating icon when video plays (matching Apple's Live Photos)
+🎯 **LIVE Icon Animation** — Rotating icon when video plays (matching Apple's Live Photos)<br>
+🔎 **Native Detection** — Detects Apple image + video pairs and Android single-file Motion Photos in the browser<br>
+🔒 **Local Processing** — Detection and extraction stay on-device; uploading is controlled by your application
 
 ## Installation
 
@@ -107,6 +109,68 @@ lp.addEventListener('live-photo:pause', () => {
 lp.addEventListener('live-photo:ready', () => {
   console.log('Component initialized');
 });
+```
+
+### Detect Original Live Photo Files
+
+Use a multiple file input so iOS and Windows users can select both parts of an
+Apple Live Photo. Android Motion Photos are usually a single file.
+
+```html
+<input id="live-input" type="file" multiple
+  accept="image/jpeg,image/heic,image/heif,image/avif,video/mp4,video/quicktime,.mov,.heic,.heif,.avif">
+<live-photo id="preview" width="600" muted></live-photo>
+
+<script type="module">
+  import 'live-photo-component';
+
+  const input = document.querySelector('#live-input');
+  const preview = document.querySelector('#preview');
+
+  input.addEventListener('change', async () => {
+    try {
+      const result = await preview.load(input.files);
+      console.log(result.protocol, result.confidence, result.match);
+    } catch (error) {
+      console.error(error.code, error.message);
+    }
+  });
+</script>
+```
+
+Supported detection paths:
+
+- Apple `HEIC/JPG + MOV` pairs via shared `ContentIdentifier`
+- Apple pairs via matching filename when identifiers are unavailable
+- Android/Google single-file Motion Photos with appended MP4/MOV media
+- Samsung, HUAWEI, and OPPO embedded-video variants when their metadata marker is present
+
+The component deliberately does **not** classify a lone HEIC/JPG as a Live
+Photo. If iOS Safari supplies only the still resource, the missing paired video
+cannot be reconstructed by JavaScript.
+
+Detection is separate from codec support. Some Windows and Android browsers
+cannot decode an original Apple HEIC image or HEVC/MOV video. For a universal
+preview, keep the originals for upload and let your server return a JPEG/WebP
+cover plus an H.264 MP4 playback derivative.
+
+For batch input, import the default `LivePhotoElement` class and use
+`LivePhotoElement.detectAll(files)`. It returns one result
+per detected Live Photo without creating preview URLs.
+
+### Detection Result
+
+```javascript
+{
+  kind: 'live-photo',
+  protocol: 'apple-live-photo',
+  photo: Blob,
+  video: Blob,
+  confidence: 'high',
+  match: 'content-identifier',
+  contentIdentifier: '...',
+  sourceFiles: [File, File]
+}
 ```
 
 ### Dynamic Updates
@@ -189,6 +253,8 @@ onMounted(() => {
 | `live-photo:ready` | Fired when component is initialized |
 | `live-photo:play` | Fired when video starts playing |
 | `live-photo:pause` | Fired when video stops |
+| `live-photo:detected` | Fired after `load()` recognizes a Live Photo |
+| `live-photo:error` | Fired when detection or video loading fails |
 
 ## LIVE Icon Animation
 

@@ -1,6 +1,6 @@
 {
   "name": "live-photo-component",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Apple-style Live Photo Web Component. Zero dependencies, native HTML5.",
   "type": "module",
   "main": "dist/live-photo.umd.js",
@@ -24,7 +24,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "demo": "npx serve demo -p 3000"
+    "demo": "npx serve demo -p 3000",
+    "test": "node --test"
   },
   "repository": {
     "type": "git",
@@ -47,7 +48,7 @@
   },
   "homepage": "https://github.com/Feirobot/live-photo-component#readme",
   "devDependencies": {
-    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-terser": "^1.0.0",
     "rollup": "^4.9.0"
   }
 }
