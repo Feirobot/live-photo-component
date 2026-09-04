@@ -198,12 +198,9 @@
   </div>
 
   <div class="api-demo">
-    <h2>Native File Detection</h2>
-    <p>Select one Android Motion Photo, or select the image and video parts of an Apple Live Photo together.</p>
-    <input id="live-file-input" type="file" multiple
-      accept="image/jpeg,image/heic,image/heif,image/avif,video/mp4,video/quicktime,.mov,.heic,.heif,.avif">
-    <live-photo id="file-preview" width="100%" muted></live-photo>
-    <div class="status" id="detection-status">Waiting for files</div>
+    <h2>Live Photo Uploader</h2>
+    <p>Ready to use: choose one Android Motion Photo, or an Apple image and its matching MOV/MP4 together.</p>
+    <live-photo-uploader label="Choose a Live Photo" width="100%"></live-photo-uploader>
   </div>
 
   <div class="features">
@@ -287,20 +284,6 @@
       }
     }
 
-    const fileInput = document.getElementById('live-file-input');
-    const filePreview = document.getElementById('file-preview');
-    const detectionStatus = document.getElementById('detection-status');
-    fileInput.addEventListener('change', async () => {
-      detectionStatus.textContent = 'Detecting…';
-      try {
-        const result = await filePreview.load(fileInput.files);
-        detectionStatus.textContent = `✓ ${result.protocol} · ${result.confidence} · ${result.match}`;
-        detectionStatus.style.background = '#e8f5e9';
-      } catch (error) {
-        detectionStatus.textContent = `✕ ${error.message}`;
-        detectionStatus.style.background = '#ffebee';
-      }
-    });
   </script>
 </body>
 </html>

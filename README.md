@@ -19,14 +19,14 @@ keeps detection and video extraction in the browser.
 
 ## Download the version that matches your media
 
-There are two npm workflows. `1.1.3` remains backward-compatible with the
+There are two npm workflows. `1.2.0` remains backward-compatible with the
 `photo` + `video` player API from `1.0.0`, but it adds original-file
 recognition. Choose based on how your media reaches the page.
 
 | Version | Main capability | Use it when | What your page receives | UI you need to build | How you use it | Install |
 | --- | --- | --- | --- | --- | --- | --- |
 | [`1.0.0`](https://www.npmjs.com/package/live-photo-component/v/1.0.0) | Plays an existing cover-image and video pair | Your CMS, database, or API already stores a cover image URL and an MP4/MOV URL separately | Two URLs: `photo` and `video` | Only the `<live-photo>` player | Set `<live-photo photo="…" video="…">` | `npm install live-photo-component@1.0.0` |
-| [`1.1.3`](https://www.npmjs.com/package/live-photo-component/v/1.1.3) (`latest`) | Plays existing URL pairs **and** recognizes original phone Live Photos in-browser | Users upload files directly from Android or iPhone; use it for new upload features | Android: one original Motion Photo file. Apple: the original image and paired MOV/MP4 selected together | The `<live-photo>` player **plus** a file picker, upload state, and any UI your product needs around it | Call `preview.load(input.files)` or `LivePhotoElement.detectAll(files)` | `npm install live-photo-component@1.1.3` |
+| [`1.2.0`](https://www.npmjs.com/package/live-photo-component/v/1.2.0) (`latest`) | Plays existing URL pairs, recognizes original phone Live Photos, and includes a ready-to-use upload UI | Users upload files directly from Android or iPhone; use it for new upload features | Android: one original Motion Photo file. Apple: the original image and paired MOV/MP4 selected together | Nothing for the basic flow: `<live-photo-uploader>` includes picker, status, errors, and preview. Build your own UI only for a custom flow. | Add `<live-photo-uploader>`; use `load()` / `detectAll()` only for advanced custom UI | `npm install live-photo-component@1.2.0` |
 
 ### 1. Existing image + video: install `1.0.0`
 
@@ -40,7 +40,7 @@ npm install live-photo-component@1.0.0
 
 Source branch: [`manual-photo-video`](https://github.com/Feirobot/live-photo-component/tree/manual-photo-video).
 
-### 2. Original phone Live Photos: install `1.1.3` (recommended for new uploads)
+### 2. Original phone Live Photos: install `1.2.0` (recommended for new uploads)
 
 Use the newest version when users upload original files from a phone. It keeps
 the manual `photo` + `video` player API, and additionally provides `load()`,
@@ -53,11 +53,42 @@ the manual `photo` + `video` player API, and additionally provides `load()`,
   fallback.
 
 ```bash
-npm install live-photo-component@1.1.3
+npm install live-photo-component@1.2.0
 # Equivalent: npm install live-photo-component
 ```
 
 Source branch: [`main`](https://github.com/Feirobot/live-photo-component/tree/main).
+
+#### Easiest upload UI: one HTML element
+
+For the common “choose files, recognize, and preview” flow, no custom upload
+UI or JavaScript is required:
+
+```html
+<live-photo-uploader label="Choose a Live Photo" width="720"></live-photo-uploader>
+```
+
+The built-in UI provides the button, Android/Apple selection hint, loading
+state, recognition error, and `<live-photo>` preview. To upload the recognized
+originals to your server after success, listen for one event:
+
+```js
+document.querySelector('live-photo-uploader').addEventListener(
+  'live-photo-uploader:detected',
+  ({ detail }) => {
+    // detail.photo, detail.video, detail.protocol, detail.sourceFiles
+    console.log('Ready to upload:', detail.sourceFiles);
+  }
+);
+```
+
+The uploader also emits `live-photo-uploader:change` when files are selected
+and `live-photo-uploader:error` when recognition fails.
+
+#### Advanced: build your own file picker UI
+
+Use the lower-level API below only when you want full control of the picker,
+progress display, and surrounding page design.
 
 ### Other maintained branch
 
@@ -90,7 +121,8 @@ import 'live-photo-component/styles.css';
 
 The released npm package is available as
 [`live-photo-component`](https://www.npmjs.com/package/live-photo-component).
-The current `latest` release is `1.1.3` and includes native detection.
+The current `latest` release is `1.2.0` and includes native detection and the
+ready-to-use uploader UI.
 
 ## Play a Live Photo
 
@@ -241,7 +273,7 @@ npm run build
 npm run demo
 ```
 
-The demo is served at `http://localhost:3000` by default.
+The demo is served at `http://localhost:3000/demo/` by default.
 
 ## Project layout
 

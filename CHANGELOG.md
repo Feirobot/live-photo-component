@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [1.2.0] - 2026-09-04
+
+### Added / 新增
+- `<live-photo-uploader>`: a ready-to-use file picker, Android/Apple selection guidance, recognition state, error message, and player preview / 新增 `<live-photo-uploader>`：开箱即用的文件选择、Android/Apple 选择指引、识别状态、错误提示与播放预览
+- `live-photo-uploader:change`, `live-photo-uploader:detected`, and `live-photo-uploader:error` events for connecting a recognized result to an application upload flow / 新增上传流程事件，可把识别结果交给应用上传
+
+---
+
 ## [1.1.3] - 2026-09-04
 
 ### Changed / 调整
@@ -57,6 +65,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+[1.2.0]: https://github.com/Feirobot/live-photo-component/compare/v1.1.3...v1.2.0
 [1.1.3]: https://github.com/Feirobot/live-photo-component/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/Feirobot/live-photo-component/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/Feirobot/live-photo-component/compare/v1.1.0...v1.1.1

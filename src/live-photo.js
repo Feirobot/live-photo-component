@@ -408,9 +408,174 @@ class LivePhotoElement extends HTMLElement {
   }
 }
 
+/**
+ * A ready-to-use picker, recognizer, and preview for original phone Live Photos.
+ *
+ * @usage
+ * <live-photo-uploader label="Choose a Live Photo"></live-photo-uploader>
+ *
+ * @events
+ * - live-photo-uploader:detected - Recognition succeeded; detail contains photo,
+ *   video, protocol, sourceFiles, and the nested player element.
+ * - live-photo-uploader:error - No usable Live Photo was found or playback setup failed.
+ * - live-photo-uploader:change - The user selected files, before recognition begins.
+ */
+class LivePhotoUploaderElement extends HTMLElement {
+  static get observedAttributes() {
+    return ['label', 'width', 'radius', 'disabled'];
+  }
+
+  constructor() {
+    super();
+    this._initialized = false;
+    this._isLoading = false;
+  }
+
+  get label() { return this.getAttribute('label') || 'Choose a Live Photo'; }
+  set label(value) { this.setAttribute('label', value); }
+
+  get disabled() { return this.hasAttribute('disabled'); }
+  set disabled(value) {
+    if (value === false || value === 'false') this.removeAttribute('disabled');
+    else this.setAttribute('disabled', '');
+  }
+
+  get player() {
+    return this.querySelector('live-photo');
+  }
+
+  connectedCallback() {
+    if (!this._initialized) {
+      this._render();
+      this._init();
+    }
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (!this._initialized || oldValue === newValue) return;
+    if (name === 'label') this._setLabel();
+    if (name === 'disabled') this._syncDisabled();
+    if (name === 'width' || name === 'radius') this._syncPlayerAttributes();
+  }
+
+  /** Opens the native file picker. */
+  browse() {
+    if (!this.disabled && !this._isLoading) this.querySelector('input[type="file"]')?.click();
+  }
+
+  /** Detects and previews a FileList, File[], or single File programmatically. */
+  async load(files) {
+    if (this._isLoading) return null;
+    this._setLoading(true);
+    this._setStatus('Recognizing Live Photo…');
+    try {
+      const result = await this.player.load(files);
+      this.dataset.hasPreview = 'true';
+      this._setStatus(this._successMessage(result));
+      this._dispatch('detected', { ...result, player: this.player });
+      return result;
+    } catch (error) {
+      const code = error?.code || 'LIVE_PHOTO_NOT_DETECTED';
+      this._setStatus(this._errorMessage(code), true);
+      this._dispatch('error', { error, code });
+      throw error;
+    } finally {
+      this._setLoading(false);
+    }
+  }
+
+  _render() {
+    this.innerHTML = `
+      <div class="live-photo-uploader__controls">
+        <input class="live-photo-uploader__input" type="file" multiple
+          accept="image/jpeg,image/heic,image/heif,image/avif,video/mp4,video/quicktime,.mov,.heic,.heif,.avif">
+        <button class="live-photo-uploader__button" type="button"></button>
+        <p class="live-photo-uploader__hint">Android: choose one original Motion Photo. Apple: choose the image and matching MOV/MP4 together.</p>
+        <p class="live-photo-uploader__status" role="status" aria-live="polite"></p>
+      </div>
+      <live-photo class="live-photo-uploader__preview" muted></live-photo>
+    `;
+  }
+
+  _init() {
+    this._initialized = true;
+    const input = this.querySelector('input[type="file"]');
+    const button = this.querySelector('button');
+    button.addEventListener('click', () => this.browse());
+    input.addEventListener('change', async () => {
+      if (!input.files?.length) return;
+      this._dispatch('change', { files: input.files });
+      try {
+        await this.load(input.files);
+      } catch {
+        // The component has already rendered the actionable error state.
+      }
+    });
+    this._setLabel();
+    this._syncDisabled();
+    this._syncPlayerAttributes();
+  }
+
+  _setLabel() {
+    const button = this.querySelector('button');
+    if (button) button.textContent = this.label;
+  }
+
+  _syncDisabled() {
+    const input = this.querySelector('input[type="file"]');
+    const button = this.querySelector('button');
+    if (input) input.disabled = this.disabled || this._isLoading;
+    if (button) button.disabled = this.disabled || this._isLoading;
+  }
+
+  _syncPlayerAttributes() {
+    const player = this.player;
+    if (!player) return;
+    if (this.hasAttribute('width')) player.setAttribute('width', this.getAttribute('width'));
+    if (this.hasAttribute('radius')) player.setAttribute('radius', this.getAttribute('radius'));
+  }
+
+  _setLoading(isLoading) {
+    this._isLoading = isLoading;
+    this.toggleAttribute('loading', isLoading);
+    this._syncDisabled();
+  }
+
+  _setStatus(message, isError = false) {
+    const status = this.querySelector('.live-photo-uploader__status');
+    if (!status) return;
+    status.textContent = message;
+    status.classList.toggle('is-error', isError);
+  }
+
+  _successMessage(result) {
+    return result.protocol === 'apple-live-photo'
+      ? 'Apple Live Photo recognized. Press LIVE to play.'
+      : 'Motion Photo recognized. Press LIVE to play.';
+  }
+
+  _errorMessage(code) {
+    if (code === 'LIVE_PHOTO_NOT_DETECTED') {
+      return 'No Live Photo found. Choose one Android Motion Photo, or an Apple image and matching MOV/MP4 together.';
+    }
+    return 'Could not recognize this Live Photo. Please try the original files.';
+  }
+
+  _dispatch(name, detail = {}) {
+    this.dispatchEvent(new CustomEvent(`live-photo-uploader:${name}`, {
+      bubbles: true,
+      composed: true,
+      detail
+    }));
+  }
+}
+
 // Auto-register if not already defined
 if (!customElements.get('live-photo')) {
   customElements.define('live-photo', LivePhotoElement);
+}
+if (!customElements.get('live-photo-uploader')) {
+  customElements.define('live-photo-uploader', LivePhotoUploaderElement);
 }
 
 // Auto-initialize existing elements
