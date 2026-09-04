@@ -23,10 +23,15 @@ There are two npm workflows. `1.2.0` remains backward-compatible with the
 `photo` + `video` player API from `1.0.0`, but it adds original-file
 recognition. Choose based on how your media reaches the page.
 
+For a simple choice, use the npm tags `manual` and `latest`. Releases
+`1.1.0`–`1.1.3` were transitional builds and are deprecated; existing installs
+remain available, but new projects should choose one of the two supported
+entries below.
+
 | Version | Main capability | Use it when | What your page receives | UI you need to build | How you use it | Install |
 | --- | --- | --- | --- | --- | --- | --- |
-| [`1.0.0`](https://www.npmjs.com/package/live-photo-component/v/1.0.0) | Plays an existing cover-image and video pair | Your CMS, database, or API already stores a cover image URL and an MP4/MOV URL separately | Two URLs: `photo` and `video` | Only the `<live-photo>` player | Set `<live-photo photo="…" video="…">` | `npm install live-photo-component@1.0.0` |
-| [`1.2.0`](https://www.npmjs.com/package/live-photo-component/v/1.2.0) (`latest`) | Plays existing URL pairs, recognizes original phone Live Photos, and includes a ready-to-use upload UI | Users upload files directly from Android or iPhone; use it for new upload features | Android: one original Motion Photo file. Apple: the original image and paired MOV/MP4 selected together | Nothing for the basic flow: `<live-photo-uploader>` includes picker, status, errors, and preview. Build your own UI only for a custom flow. | Add `<live-photo-uploader>`; use `load()` / `detectAll()` only for advanced custom UI | `npm install live-photo-component@1.2.0` |
+| [`1.0.0`](https://www.npmjs.com/package/live-photo-component/v/1.0.0) (`manual`) | Plays an existing cover-image and video pair | Your CMS, database, or API already stores a cover image URL and an MP4/MOV URL separately | Two URLs: `photo` and `video` | Only the `<live-photo>` player | Set `<live-photo photo="…" video="…">` | `npm install live-photo-component@manual` |
+| [`1.2.0`](https://www.npmjs.com/package/live-photo-component/v/1.2.0) (`latest`) | Plays existing URL pairs, recognizes original phone Live Photos, and includes a ready-to-use upload UI | Users upload files directly from Android or iPhone; use it for new upload features | Android: one original Motion Photo file. Apple: the original image and paired MOV/MP4 selected together | Nothing for the basic flow: `<live-photo-uploader>` includes picker, status, errors, and preview. Build your own UI only for a custom flow. | Add `<live-photo-uploader>`; use `load()` / `detectAll()` only for advanced custom UI | `npm install live-photo-component@latest` |
 
 ### 1. Existing image + video: install `1.0.0`
 
