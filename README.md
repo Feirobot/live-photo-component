@@ -17,6 +17,37 @@ keeps detection and video extraction in the browser.
 
 ![Live Photo preview](demo.gif)
 
+## Choose the right version
+
+The repository keeps three maintained code lines. Pick one deliberately: they
+solve different integration problems.
+
+| Branch | npm / package version | Best for | How media is supplied |
+| --- | --- | --- | --- |
+| [`main` — native Live Photo](https://github.com/Feirobot/live-photo-component/tree/main) | `1.1.1` (`latest`) | New projects and cross-device upload flows | Detects Android Motion Photos and Apple image + MOV/MP4 pairs locally |
+| [`manual-photo-video`](https://github.com/Feirobot/live-photo-component/tree/manual-photo-video) | `1.0.0` | Existing systems that already store a cover and video separately | Set the `photo` and `video` URLs yourself |
+| [`wordpress-plugin`](https://github.com/Feirobot/live-photo-component/tree/wordpress-plugin) | Legacy WordPress code | Sites still using the original WordPress plugin workflow | Configure the plugin inside WordPress |
+
+### `1.0.0` vs `1.1.0`
+
+`1.0.0` is the stable manual workflow: it plays a Live Photo only after your
+application provides both a cover image URL and video URL. It does **not**
+inspect an uploaded original file.
+
+`1.1.0` is the current native workflow: it keeps the same `<live-photo>`
+player and adds `load()`, `detect()`, and `detectAll()` to recognize Android
+single-file Motion Photos and Apple image + paired MOV/MP4 exports in the
+browser. Use `1.1.0` for new uploads; pin `1.0.0` if you intentionally need
+the previous manual behavior:
+
+```bash
+# Current native recognition workflow
+npm install live-photo-component
+
+# Previous manual image + video workflow
+npm install live-photo-component@1.0.0
+```
+
 ## What it does
 
 | Use case | Result |
@@ -33,13 +64,6 @@ playback fails.
 
 ## Install
 
-The native-detection work currently lives on the `feature/native-live-photo-detection`
-branch. Install that branch to use the APIs documented below:
-
-```bash
-npm install github:Feirobot/live-photo-component#feature/native-live-photo-detection
-```
-
 Then import the element and its stylesheet:
 
 ```js
@@ -47,9 +71,9 @@ import 'live-photo-component';
 import 'live-photo-component/styles.css';
 ```
 
-The released npm package is also available as
-[`live-photo-component`](https://www.npmjs.com/package/live-photo-component),
-but it does not yet include the native-detection branch.
+The released npm package is available as
+[`live-photo-component`](https://www.npmjs.com/package/live-photo-component).
+The current `latest` release is `1.1.1` and includes native detection.
 
 ## Play a Live Photo
 

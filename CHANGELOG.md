@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [1.1.1] - 2026-09-04
+
+### Changed / 调整
+- Reworked the README with a clear `1.0.0` manual-workflow versus `1.1.x` native-recognition guide / 重写 README，清晰说明 `1.0.0` 手动图片+视频流程与 `1.1.x` 原生识别流程的差异
+- Documented the maintained native, manual, and WordPress branches / 说明原生识别、手动图片+视频与 WordPress 三条维护分支
+
+---
+
 ## [1.1.0] - 2026-09-04
 
 ### Added / 新增
@@ -35,5 +43,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+[1.1.1]: https://github.com/Feirobot/live-photo-component/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Feirobot/live-photo-component/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Feirobot/live-photo-component/releases/tag/v1.0.0
