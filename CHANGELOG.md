@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [1.1.2] - 2026-09-04
+
+### Changed / 调整
+- Made the npm README a direct two-version download guide: `1.0.0` for existing image + video URLs, `1.1.2` for browser-side Android and Apple Live Photo recognition / README 改为直接的双版本下载指引：`1.0.0` 用于已有图片+视频地址，`1.1.2` 用于浏览器识别 Android 与 Apple 原生实况照片
+
+---
+
 ## [1.1.1] - 2026-09-04
 
 ### Changed / 调整
@@ -43,6 +50,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+[1.1.2]: https://github.com/Feirobot/live-photo-component/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/Feirobot/live-photo-component/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Feirobot/live-photo-component/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Feirobot/live-photo-component/releases/tag/v1.0.0

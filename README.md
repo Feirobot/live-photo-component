@@ -17,36 +17,52 @@ keeps detection and video extraction in the browser.
 
 ![Live Photo preview](demo.gif)
 
-## Choose the right version
+## Download the version that matches your media
 
-The repository keeps three maintained code lines. Pick one deliberately: they
-solve different integration problems.
+There are two npm workflows. They use the same `<live-photo>` player, but
+their input is different. Choose based on what your application receives.
 
-| Branch | npm / package version | Best for | How media is supplied |
-| --- | --- | --- | --- |
-| [`main` — native Live Photo](https://github.com/Feirobot/live-photo-component/tree/main) | `1.1.1` (`latest`) | New projects and cross-device upload flows | Detects Android Motion Photos and Apple image + MOV/MP4 pairs locally |
-| [`manual-photo-video`](https://github.com/Feirobot/live-photo-component/tree/manual-photo-video) | `1.0.0` | Existing systems that already store a cover and video separately | Set the `photo` and `video` URLs yourself |
-| [`wordpress-plugin`](https://github.com/Feirobot/live-photo-component/tree/wordpress-plugin) | Legacy WordPress code | Sites still using the original WordPress plugin workflow | Configure the plugin inside WordPress |
+| If you have… | Install | What it supports |
+| --- | --- | --- |
+| A cover-image URL **and** a video URL already stored by your system | [`live-photo-component@1.0.0`](https://www.npmjs.com/package/live-photo-component/v/1.0.0) | Plays your existing `photo` + `video` pair. It does not inspect uploaded original files. |
+| Original files uploaded from phones | [`live-photo-component@1.1.2`](https://www.npmjs.com/package/live-photo-component/v/1.1.2) (`latest`) | Identifies Android single-file Motion Photos and Apple image + paired MOV/MP4 Live Photos directly in the browser, then plays them. |
 
-### `1.0.0` vs `1.1.0`
+### 1. Existing image + video: install `1.0.0`
 
-`1.0.0` is the stable manual workflow: it plays a Live Photo only after your
-application provides both a cover image URL and video URL. It does **not**
-inspect an uploaded original file.
-
-`1.1.0` is the current native workflow: it keeps the same `<live-photo>`
-player and adds `load()`, `detect()`, and `detectAll()` to recognize Android
-single-file Motion Photos and Apple image + paired MOV/MP4 exports in the
-browser. Use `1.1.0` for new uploads; pin `1.0.0` if you intentionally need
-the previous manual behavior:
+Use this version if your backend, CMS, or database already gives you two URLs:
+one cover image and one video. Supply them through the `photo` and `video`
+attributes yourself.
 
 ```bash
-# Current native recognition workflow
-npm install live-photo-component
-
-# Previous manual image + video workflow
 npm install live-photo-component@1.0.0
 ```
+
+Source branch: [`manual-photo-video`](https://github.com/Feirobot/live-photo-component/tree/manual-photo-video).
+
+### 2. Original phone Live Photos: install `1.1.2` (recommended for new uploads)
+
+Use the newest version when users upload original files from a phone. It keeps
+the manual `photo` + `video` player API, and additionally provides `load()`,
+`detect()`, and `detectAll()`:
+
+- **Android / Google / vendor Motion Photos:** one original image file that
+  contains its motion video.
+- **Apple Live Photos:** select the original image and its matching MOV/MP4
+  file together; pairing uses `ContentIdentifier`, with filename matching as a
+  fallback.
+
+```bash
+npm install live-photo-component@1.1.2
+# Equivalent: npm install live-photo-component
+```
+
+Source branch: [`main`](https://github.com/Feirobot/live-photo-component/tree/main).
+
+### Other maintained branch
+
+[`wordpress-plugin`](https://github.com/Feirobot/live-photo-component/tree/wordpress-plugin)
+keeps the legacy WordPress plugin implementation. It is not an npm release
+line; use it only for an existing WordPress plugin integration.
 
 ## What it does
 
