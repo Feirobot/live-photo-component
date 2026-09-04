@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [1.1.3] - 2026-09-04
+
+### Changed / 调整
+- Added a one-table npm version guide covering capability, scenario, inputs, required UI, integration method, and install command / 新增一张 npm 版本对照表，覆盖功能、场景、输入、所需 UI、使用方式与安装命令
+
+---
+
 ## [1.1.2] - 2026-09-04
 
 ### Changed / 调整
@@ -50,6 +57,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+[1.1.3]: https://github.com/Feirobot/live-photo-component/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/Feirobot/live-photo-component/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/Feirobot/live-photo-component/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Feirobot/live-photo-component/compare/v1.0.0...v1.1.0
