@@ -26,6 +26,8 @@
  * - live-photo:ready - Fired when component is initialized
  */
 
+import { detectLivePhoto, detectLivePhotos } from './live-photo-detector.js';
+
 class LivePhotoElement extends HTMLElement {
   static get observedAttributes() {
     return ['photo', 'video', 'width', 'muted', 'autoplay', 'radius', 'loop'];
@@ -37,6 +39,7 @@ class LivePhotoElement extends HTMLElement {
     this._longPressTimer = null;
     this._initialized = false;
     this._hasAutoplayed = false;
+    this._objectUrls = [];
   }
 
   // Property getters/setters
@@ -49,9 +52,9 @@ class LivePhotoElement extends HTMLElement {
   get width() { return this.getAttribute('width') || '600'; }
   set width(val) { this.setAttribute('width', val); }
 
-  get muted() { return this.hasAttribute('muted') && this.getAttribute('muted') !== 'false'; }
+  get muted() { return !this.hasAttribute('muted') || this.getAttribute('muted') !== 'false'; }
   set muted(val) {
-    if (val === false || val === 'false') this.removeAttribute('muted');
+    if (val === false || val === 'false') this.setAttribute('muted', 'false');
     else this.setAttribute('muted', 'true');
   }
 
@@ -95,7 +98,7 @@ class LivePhotoElement extends HTMLElement {
         if (newValue) this._updateVideo(el, newValue);
         break;
       case 'width':
-        el.style.maxWidth = newValue || '600px';
+        el.style.maxWidth = this._cssLength(newValue || '600', 'px');
         break;
       case 'muted':
         const video = el.querySelector('video');
@@ -126,6 +129,39 @@ class LivePhotoElement extends HTMLElement {
     return this._isPlaying;
   }
 
+  /**
+   * Detect and preview an original Live Photo selection.
+   * Accepts an Android single-file Motion Photo or an Apple image + video pair.
+   */
+  async load(input) {
+    try {
+      const result = await detectLivePhoto(input);
+      this._revokeObjectUrls();
+      const photoUrl = URL.createObjectURL(result.photo);
+      const videoUrl = URL.createObjectURL(result.video);
+      this._objectUrls.push(photoUrl, videoUrl);
+      this.photo = photoUrl;
+      this.video = videoUrl;
+      this.dataset.protocol = result.protocol;
+      this._dispatchEvent('detected', result);
+      return result;
+    } catch (error) {
+      this._dispatchEvent('error', {
+        error,
+        code: error?.code || 'DETECTION_FAILED'
+      });
+      throw error;
+    }
+  }
+
+  static detect(input) {
+    return detectLivePhoto(input);
+  }
+
+  static detectAll(input) {
+    return detectLivePhotos(input);
+  }
+
   _render() {
     const width = this.width;
     const muted = this.muted;
@@ -133,8 +169,8 @@ class LivePhotoElement extends HTMLElement {
     const loop = this.loop;
 
     this.innerHTML = `
-      <div class="live-photo" 
-           style="max-width: ${width}px; border-radius: ${radius}px;" 
+      <div class="live-photo"
+           style="max-width: ${this._cssLength(width, 'px')}; border-radius: ${radius}px;"
            data-muted="${muted}">
         <div class="container">
           <div class="photo-bg"></div>
@@ -171,7 +207,7 @@ class LivePhotoElement extends HTMLElement {
     const loading = el.querySelector('.loading');
 
     // Set video source
-    video.src = this.video;
+    if (this.video) video.src = this.video;
 
     // Set icon path dynamically (relative to script location)
     const iconImg = el.querySelector('.icon img');
@@ -244,9 +280,12 @@ class LivePhotoElement extends HTMLElement {
       this._stopVideo(el);
     }, { passive: true });
 
-    // WeChat browser compatibility
+    // A direct tap on the LIVE badge is more reliable than a delayed long-press
+    // in mobile browsers because it retains the browser's user activation.
     const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
-    if (isWeChat) {
+    const isTouchFirst = navigator.maxTouchPoints > 0 ||
+      window.matchMedia?.('(hover: none), (pointer: coarse)').matches;
+    if (isWeChat || isTouchFirst) {
       icon.addEventListener('click', (e) => {
         e.preventDefault();
         this._isPlaying ? this._stopVideo(el) : this._playVideo(el);
@@ -272,6 +311,11 @@ class LivePhotoElement extends HTMLElement {
       this._isPlaying = true;
     }).catch((err) => {
       console.warn('[live-photo] Playback failed:', err);
+      this._dispatchEvent('error', {
+        code: 'PLAYBACK_FAILED',
+        error: err,
+        mediaError: video.error?.code || null
+      });
     });
   }
 
@@ -326,14 +370,33 @@ class LivePhotoElement extends HTMLElement {
       loading.classList.add('error');
       loading.querySelector('.spinner').textContent = '⚠️';
     }
+    const video = event.currentTarget;
+    this._dispatchEvent('error', {
+      code: 'VIDEO_LOAD_FAILED',
+      error: event,
+      mediaError: video?.error?.code || null
+    });
   }
 
-  _dispatchEvent(name) {
+  _dispatchEvent(name, extraDetail = {}) {
     this.dispatchEvent(new CustomEvent(`live-photo:${name}`, {
       bubbles: true,
       composed: true,
-      detail: { isPlaying: this._isPlaying }
+      detail: { isPlaying: this._isPlaying, ...extraDetail }
     }));
+  }
+
+  _cssLength(value, defaultUnit) {
+    const normalized = String(value ?? '').trim();
+    if (!normalized) return `600${defaultUnit}`;
+    return /^-?(?:\d+|\d*\.\d+)$/.test(normalized)
+      ? `${normalized}${defaultUnit}`
+      : normalized;
+  }
+
+  _revokeObjectUrls() {
+    this._objectUrls.forEach(url => URL.revokeObjectURL(url));
+    this._objectUrls = [];
   }
 
   _cleanup() {
@@ -341,6 +404,7 @@ class LivePhotoElement extends HTMLElement {
       clearTimeout(this._longPressTimer);
       this._longPressTimer = null;
     }
+    this._revokeObjectUrls();
   }
 }
 

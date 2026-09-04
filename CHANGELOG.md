@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [1.1.0] - 2026-09-04
+
+### Added / 新增
+- Native browser-side recognition for Apple image + video Live Photo pairs / 原生识别 Apple 图片与视频双文件实况照片
+- Native extraction of Android and vendor single-file Motion Photos / 原生识别并提取 Android 及厂商单文件动态照片
+- `LivePhotoElement.detect()`, `detectAll()` and `load()` APIs / 新增识别、批量识别与直接加载 API
+- Detection metadata for protocol, confidence, pairing method, and Apple Content Identifier / 返回协议、置信度、配对方式及 Apple 标识信息
+
+### Fixed / 修复
+- Android playback reliability with true muted-by-default behavior and a direct LIVE badge tap fallback / 默认静音并支持点击 LIVE 徽章，提升 Android 播放可靠性
+- Empty components no longer attempt to load the current page as a video / 空组件不再把当前页面误作视频加载
+- Playback and media loading failures now emit actionable `live-photo:error` codes / 播放与媒体加载失败提供明确错误码
+
+---
+
 ## [1.0.0] - 2026-04-08
 
 ### Added / 新增
@@ -20,4 +35,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+[1.1.0]: https://github.com/Feirobot/live-photo-component/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Feirobot/live-photo-component/releases/tag/v1.0.0

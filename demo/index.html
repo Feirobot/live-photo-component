@@ -197,6 +197,15 @@
     <div class="status" id="status">Ready</div>
   </div>
 
+  <div class="api-demo">
+    <h2>Native File Detection</h2>
+    <p>Select one Android Motion Photo, or select the image and video parts of an Apple Live Photo together.</p>
+    <input id="live-file-input" type="file" multiple
+      accept="image/jpeg,image/heic,image/heif,image/avif,video/mp4,video/quicktime,.mov,.heic,.heif,.avif">
+    <live-photo id="file-preview" width="100%" muted></live-photo>
+    <div class="status" id="detection-status">Waiting for files</div>
+  </div>
+
   <div class="features">
     <h2>Features</h2>
     <div class="features-grid">
@@ -206,7 +215,7 @@
       </div>
       <div class="feature-item">
         <strong> Touch-friendly</strong>
-        <span>Long-press on mobile</span>
+        <span>Long-press or tap LIVE on mobile</span>
       </div>
       <div class="feature-item">
         <strong>💬 WeChat Ready</strong>
@@ -277,6 +286,21 @@
         status.style.background = isPlaying ? '#e8f5e9' : '#fff3e0';
       }
     }
+
+    const fileInput = document.getElementById('live-file-input');
+    const filePreview = document.getElementById('file-preview');
+    const detectionStatus = document.getElementById('detection-status');
+    fileInput.addEventListener('change', async () => {
+      detectionStatus.textContent = 'Detecting…';
+      try {
+        const result = await filePreview.load(fileInput.files);
+        detectionStatus.textContent = `✓ ${result.protocol} · ${result.confidence} · ${result.match}`;
+        detectionStatus.style.background = '#e8f5e9';
+      } catch (error) {
+        detectionStatus.textContent = `✕ ${error.message}`;
+        detectionStatus.style.background = '#ffebee';
+      }
+    });
   </script>
 </body>
 </html>

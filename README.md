@@ -1,270 +1,227 @@
 # live-photo-component
 
-**中文**：Apple 风格实况照片 Web 组件，让静态照片栩栩如生 ｜ **EN**: Apple-style Live Photo Web Component that brings static photos to life.
+**A small Web Component for playing and recognizing Live Photos.**
 
-📦 **npm**: [live-photo-component](https://www.npmjs.com/package/live-photo-component)  
-📝 **Blog**: [中文介绍](https://openfilm.cc/zh/posts/live-photos-introduction-zh/) | [English Intro](https://openfilm.cc/en/posts/live-photos-introduction-en/)
+`live-photo-component` renders an Apple-style Live Photo from a cover image and
+video, then adds browser-side detection for original files:
 
-## 🎬 Live Demo
+- Android and vendor Motion Photos stored as one file
+- Apple Live Photos exported as an image plus a paired MOV/MP4
+- Conventional image/video pairs with matching file names
 
-Try it online:
+It has no runtime dependencies, works with plain HTML or any framework, and
+keeps detection and video extraction in the browser.
 
-- **🇨🇳 中文演示**: [Openfilm Blog - 实况照片介绍](https://openfilm.cc/zh/posts/live-photos-introduction-zh/)
-- **🇬🇧 English Demo**: [Openfilm Blog - Live Photos Introduction](https://openfilm.cc/en/posts/live-photos-introduction-en/)
+> 中文：一个零运行时依赖的实况照片 Web Component。支持播放现有图片 +
+> 视频，也支持在浏览器中识别安卓单文件动态照片与 Apple 双文件实况照片。
 
-Inline preview:
+![Live Photo preview](demo.gif)
 
-![Live Photo Demo](demo.gif)
+## What it does
 
----
+| Use case | Result |
+| --- | --- |
+| Existing `photo` + `video` URLs | Renders an interactive `<live-photo>` element |
+| Android Motion Photo | Extracts the cover and embedded MP4/MOV locally |
+| Apple image + MOV/MP4 | Pairs files using `ContentIdentifier`, then filename as a fallback |
+| Multiple source files | Finds every complete Live Photo with `detectAll()` |
+| Touch devices | Long-press to play; tap the LIVE badge when long-press is unreliable |
 
-## Features
+Desktop users can hover the LIVE badge. Video is muted by default, uses
+`playsinline`, and the component emits explicit events when detection or
+playback fails.
 
-✨ **Zero Dependencies** — Pure vanilla JavaScript, no framework required  
-🎬 **Native HTML5** — Uses `<video>` and CSS for smooth playback  
-🌍 **Universal** — Works with WordPress, Hugo, Astro, React, Vue, or plain HTML  
-📱 **Touch-friendly** — Long-press on mobile, hover on desktop  
-💬 **WeChat Compatible** — Tap-to-play support for WeChat browser  
-📳 **Haptic Feedback** — Vibration on supported devices  
-📐 **Auto Aspect Ratio** — Automatically detects photo dimensions  
-📐 **Responsive** — Adapts to any screen size  
-♿ **Accessible** — Keyboard navigation and screen reader support  
-⚡ **Autoplay** — Optional auto-play when component enters viewport  
-🎯 **LIVE Icon Animation** — Rotating icon when video plays (matching Apple's Live Photos)
+## Install
 
-## Installation
-
-### Via npm
+The native-detection work currently lives on the `feature/native-live-photo-detection`
+branch. Install that branch to use the APIs documented below:
 
 ```bash
-npm install live-photo-component
+npm install github:Feirobot/live-photo-component#feature/native-live-photo-detection
 ```
 
-### Via CDN
+Then import the element and its stylesheet:
 
-```html
-<script src="https://unpkg.com/live-photo-component/dist/live-photo.umd.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/live-photo-component/dist/styles.css">
-```
-
-### Import as ES Module
-
-```javascript
+```js
 import 'live-photo-component';
-import 'live-photo-component/dist/styles.css';
+import 'live-photo-component/styles.css';
 ```
 
-## Usage
+The released npm package is also available as
+[`live-photo-component`](https://www.npmjs.com/package/live-photo-component),
+but it does not yet include the native-detection branch.
 
-### Basic
+## Play a Live Photo
 
 ```html
-<live-photo 
-  photo="image.jpg" 
-  video="video.mp4">
+<live-photo
+  photo="/images/cover.jpg"
+  video="/videos/moment.mp4"
+  width="720"
+  radius="12"
+  muted>
 </live-photo>
 ```
 
-### With Options
+| Attribute | Default | Description |
+| --- | --- | --- |
+| `photo` | — | Cover image URL |
+| `video` | — | Video URL |
+| `width` | `600` | Maximum width; numbers are pixels and CSS lengths also work |
+| `muted` | `true` | Mutes the video unless set to `"false"` |
+| `autoplay` | `false` | Plays once after the element enters the viewport |
+| `radius` | `8` | Corner radius in pixels |
+| `loop` | `false` | Loops playback instead of returning to the cover |
+
+```js
+const livePhoto = document.querySelector('live-photo');
+
+livePhoto.play();
+livePhoto.pause();
+console.log(livePhoto.isPlaying());
+
+livePhoto.addEventListener('live-photo:error', ({ detail }) => {
+  console.error(detail.code, detail.error);
+});
+```
+
+## Recognize original files
+
+Use one multiple-file picker. An Android Motion Photo normally needs only one
+selected file; an Apple export normally needs both the image and its paired
+MOV/MP4 selected together.
 
 ```html
-<live-photo 
-  photo="image.jpg" 
-  video="video.mp4" 
-  width="600" 
-  muted 
-  autoplay 
-  radius="12" 
-  loop>
-</live-photo>
-```
+<input id="live-input" type="file" multiple
+  accept="image/jpeg,image/heic,image/heif,image/avif,video/mp4,video/quicktime,.mov,.heic,.heif,.avif">
 
-### JavaScript API
+<live-photo id="preview" width="720" muted></live-photo>
 
-```javascript
-const lp = document.querySelector('live-photo');
+<script type="module">
+  import 'live-photo-component';
+  import 'live-photo-component/styles.css';
 
-// Play
-lp.play();
+  const input = document.querySelector('#live-input');
+  const preview = document.querySelector('#preview');
 
-// Pause
-lp.pause();
-
-// Check if playing
-if (lp.isPlaying()) {
-  console.log('Video is playing');
-}
-
-// Listen to events
-lp.addEventListener('live-photo:play', () => {
-  console.log('Started playing');
-});
-
-lp.addEventListener('live-photo:pause', () => {
-  console.log('Stopped playing');
-});
-
-lp.addEventListener('live-photo:ready', () => {
-  console.log('Component initialized');
-});
-```
-
-### Dynamic Updates
-
-```javascript
-const lp = document.querySelector('live-photo');
-
-// Change photo
-lp.photo = 'new-image.jpg';
-
-// Change video
-lp.video = 'new-video.mp4';
-
-// Toggle mute
-lp.muted = !lp.muted;
-```
-
-### React
-
-```jsx
-import { useEffect } from 'react';
-import 'live-photo-component';
-import 'live-photo-component/dist/styles.css';
-
-function LivePhoto({ photo, video, width, muted }) {
-  useEffect(() => {
-    // The custom element is registered by the package import above
-  }, []);
-
-  return (
-    <live-photo
-      photo={photo}
-      video={video}
-      width={width}
-      muted={muted ? 'true' : 'false'}
-    />
-  );
-}
-```
-
-### Vue
-
-```vue
-<script setup>
-import { onMounted } from 'vue';
-import 'live-photo-component';
-import 'live-photo-component/dist/styles.css';
-
-onMounted(() => {
-  // The custom element is registered by the package import above
-});
+  input.addEventListener('change', async () => {
+    try {
+      const result = await preview.load(input.files);
+      console.log(result.protocol, result.confidence, result.match);
+    } catch (error) {
+      console.error(error.code, error.message);
+    }
+  });
 </script>
-
-<template>
-  <live-photo
-    photo="/photo.jpg"
-    video="/video.mp4"
-    width="600"
-    muted
-  />
-</template>
 ```
 
-## Attributes
+`load()` detects exactly one Live Photo, assigns temporary object URLs to the
+element, and revokes its previous URLs when a new selection is loaded.
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `photo` | string | required | Cover image URL |
-| `video` | string | required | Video URL |
-| `width` | string | `"600"` | Max width (px or %) |
-| `muted` | boolean | `true` | Mute video audio |
-| `autoplay` | boolean | `false` | Auto-play on first view |
-| `radius` | string | `"8"` | Border radius (px) |
-| `loop` | boolean | `false` | Loop video playback |
+For a batch picker, import the class and inspect results without changing a
+preview element:
+
+```js
+import LivePhotoElement from 'live-photo-component';
+
+const results = await LivePhotoElement.detectAll(fileInput.files);
+for (const result of results) {
+  console.log(result.protocol, result.photo, result.video);
+}
+```
+
+### Detection result
+
+```js
+{
+  kind: 'live-photo',
+  protocol: 'google-motion-photo', // or apple-live-photo, samsung-motion-photo…
+  photo: Blob,
+  video: Blob,
+  confidence: 'high',              // high | medium | low
+  match: 'embedded-video',         // content-identifier | filename | only-pair
+  contentIdentifier: '...',
+  sourceFiles: [File]
+}
+```
+
+## Detection support and limits
+
+| Source format | Detection | Notes |
+| --- | --- | --- |
+| Google / Android Motion Photo | Yes | Reads the video embedded in the original image file |
+| Samsung, HUAWEI, OPPO variants | Yes | Detected from their embedded media and metadata markers |
+| Apple HEIC/JPG + MOV | Yes | Prefers a shared `ContentIdentifier` |
+| Apple exports renamed after transfer | Usually | Falls back to matching base names |
+| A single flattened iOS still image | No | The paired video is absent and cannot be recovered |
+
+Detection is not transcoding. Original Apple HEIC and HEVC/MOV media may not
+decode in Chrome on Windows or Android. For a universal published preview,
+retain the originals if you need them, but generate a JPEG/WebP cover and an
+H.264 MP4 playback derivative on your server.
 
 ## Events
 
-| Event | Description |
-|-------|-------------|
-| `live-photo:ready` | Fired when component is initialized |
-| `live-photo:play` | Fired when video starts playing |
-| `live-photo:pause` | Fired when video stops |
+| Event | When it fires |
+| --- | --- |
+| `live-photo:ready` | The element has initialized |
+| `live-photo:play` | Video playback starts |
+| `live-photo:pause` | Video playback stops |
+| `live-photo:detected` | `load()` successfully recognizes a Live Photo |
+| `live-photo:error` | Detection, video loading, or playback fails |
 
-## LIVE Icon Animation
+`live-photo:error` includes an actionable `detail.code`, such as
+`LIVE_PHOTO_NOT_DETECTED`, `PLAYBACK_FAILED`, or `VIDEO_LOAD_FAILED`.
 
-The component features an Apple-style LIVE badge with a concentric circle icon. When the video plays:
+## Frameworks
 
-- **Icon Rotation**: The LIVE icon rotates 360° every 5 seconds
-- **Smooth Transition**: Video fades in while photo fades out
-- **Visual Feedback**: Provides clear indication that the Live Photo is playing
+The component is a standard Custom Element. Import it once in your client
+entry point, then use `<live-photo>` in React, Vue, Astro, WordPress, Hugo, or
+plain HTML.
 
-The animation is triggered automatically when you interact with the component:
+```jsx
+import 'live-photo-component';
+import 'live-photo-component/styles.css';
 
-- **Desktop**: Hover over the LIVE badge
-- **Mobile**: Long-press the photo
+export function Moment({ photo, video }) {
+  return <live-photo photo={photo} video={video} width="100%" muted="true" />;
+}
+```
 
-## Browser Support
-
-| Browser | Version |
-|---------|---------|
-| Chrome | 60+ |
-| Firefox | 60+ |
-| Safari | 11+ |
-| Edge | 79+ |
-| WeChat | All versions |
-| iOS Safari | 11+ |
-| Android Chrome | 60+ |
+For server-rendered React frameworks, import the package only from a client
+component or client-side entry point.
 
 ## Development
 
-### Install dependencies
-
 ```bash
 npm install
-```
-
-### Build
-
-```bash
+npm test
 npm run build
-```
-
-### Start demo
-
-```bash
 npm run demo
 ```
 
-Then open http://localhost:3000/demo/index.html
+The demo is served at `http://localhost:3000` by default.
 
-## Project Structure
+## Project layout
 
+```text
+src/
+  live-photo.js            Custom Element and public API
+  live-photo-detector.js   Apple and Android file recognition
+  styles.css               Component styles
+test/
+  live-photo-detector.test.js
+demo/
+  index.html
 ```
-├── src/
-│   ├── live-photo.js      # Web Component source
-│   ├── styles.css         # Component styles
-│   └── live-icon.png      # LIVE badge icon
-├── demo/
-│   └── index.html         # Demo page
-├── dist/                   # Built files (auto-generated by `npm run build`)
-├── demo.gif                # Animated preview for the README
-├── demo.mp4                # Source demo video
-├── package.json
-├── rollup.config.js
-├── CHANGELOG.md
-└── README.md
-```
+
+## Links
+
+- [GitHub repository](https://github.com/Feirobot/live-photo-component)
+- [Chinese introduction](https://openfilm.cc/zh/posts/live-photos-introduction-zh/)
+- [English introduction](https://openfilm.cc/en/posts/live-photos-introduction-en/)
+- [Changelog](CHANGELOG.md)
 
 ## License
 
-GPL-2.0-or-later
-
-## Author
-
-Made with ❤️ by Feiro
-
-## Related
-
-- 📝 **Blog Post**: [Live Photos Introduction (中文)](https://openfilm.cc/zh/posts/live-photos-introduction-zh/) | [English](https://openfilm.cc/en/posts/live-photos-introduction-en/)
-- 🌐 **Openfilm Blog**: [https://openfilm.cc](https://openfilm.cc)
-- 📦 **npm Package**: [live-photo-component](https://www.npmjs.com/package/live-photo-component)
+[GPL-2.0-or-later](LICENSE)
