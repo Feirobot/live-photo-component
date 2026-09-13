@@ -104,6 +104,7 @@ progress display, and surrounding page design.
 ### Other maintained branch
 
 [`wordpress-plugin`](https://github.com/Feirobot/live-photo-component/tree/wordpress-plugin)
+WordPress plugin download: [v1.4.1 release](https://github.com/Feirobot/live-photo-component/releases/tag/wp-v1.4.1) - demo: https://openfilm.cc/en/live-photo/
 keeps the legacy WordPress plugin implementation. It is not an npm release
 line; use it only for an existing WordPress plugin integration.
 
