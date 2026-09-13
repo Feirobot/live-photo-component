@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Live Photos for WordPress
- * Plugin URI:        https://github.com/Feirobot/Live-Photos-for-WordPress
+ * Plugin URI:        https://github.com/Feirobot/live-photo-component
  * Description:       Display Apple-style Live Photos on your WordPress site. / 在 WordPress 中展示苹果 Live Photos 动态照片效果。
  * Version:           1.4.1
  * Requires at least: 5.0
