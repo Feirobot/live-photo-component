@@ -344,4 +344,10 @@ demo/
 
 ## Need help?
 
-The component is free and MIT. If you need it integrated into a CMS, a performance pass on a page that already uses it, or a custom photo/video tool built, the maintainers take on paid work. See [Openfilm services](https://openfilm.cc/en/services/) or email feirobot@openfilm.cc.
+The component is free and open source (GPL-2.0-or-later). If you need it integrated into a CMS, a performance pass on a page that already uses it, or a custom photo/video tool built, the maintainers take on paid work:
+
+- **Live Photo integration** — $200 fixed. Apple Live Photos and Android Motion Photos playing and detecting on your site (WordPress, Astro, or plain HTML). Five business days.
+- **Performance pass** on a page that already uses the component — from $150.
+- **Custom photo/video tool** — describe it and we reply with scope and a price.
+
+Pay in USDC on Solana or Base, no account needed: [openfilm.cc/en/pay](https://openfilm.cc/en/pay/) · scope and samples: [openfilm.cc/en/services](https://openfilm.cc/en/services/) · [live-photo hub](https://openfilm.cc/en/live-photo/) · or email feirobot@openfilm.cc.
