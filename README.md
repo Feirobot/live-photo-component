@@ -19,6 +19,8 @@ keeps detection and video extraction in the browser.
 > Apple Live Photo viewer · Android Motion Photo viewer · 实况照片 / 动态照片组件
 
 ![Live Photo preview](demo.gif)
+**Live demo:** [see the component running on Openfilm](https://openfilm.cc/en/posts/live-photos-introduction-en/) — real iPhone/Android Live Photos played and detected in-browser.
+
 
 ## Download the version that matches your media
 
