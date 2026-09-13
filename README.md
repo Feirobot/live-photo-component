@@ -341,3 +341,7 @@ demo/
 ## License
 
 [GPL-2.0-or-later](LICENSE)
+
+## Need help?
+
+The component is free and MIT. If you need it integrated into a CMS, a performance pass on a page that already uses it, or a custom photo/video tool built, the maintainers take on paid work. See [Openfilm services](https://openfilm.cc/en/services/) or email feirobot@openfilm.cc.
